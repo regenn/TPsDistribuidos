@@ -1,4 +1,4 @@
-async function secuencial(){
+/*async function secuencial(){
     
     const respuesta = await fetch('https://jsonplaceholder.typicode.com/users');
     const data = await respuesta.json();
@@ -48,4 +48,4 @@ switch (modo){
         break;
     default:
         console.log(`##########\nIngrese las siguientes flags:\n -> '-s' para ejecucion secuencial\n -> '-c' para ejecucion concurrente.\n`);
-}
+}*/
