@@ -15,7 +15,12 @@ export default function PokemonList(){
             try{
                 const response = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=20");
                 const data = response.data.results;
-                setPokemon(data);
+                
+                const promises = data.map((p: any)=> axios.get(p.url));
+                const responses = await Promise.all(promises);
+
+                const fullData= responses.map(r=>r.data);
+                setPokemon(fullData);
             }
             catch (error){
                 setError("Ocurrio un error al cargar los pokemons :(");
@@ -28,13 +33,10 @@ export default function PokemonList(){
         return <p>{error}</p>;
     
     return(
-        <div>
-            <div className="pokemon-list">
-            {pokemon.map(p => (
-                <PokemonItem key={p.name} pokemon={p}/>
-            ))}
-            </div>
-            
-        </div>
+        <div className="pokemon-list">
+        {pokemon.map(p => (
+            <PokemonItem key={p.name} pokemon={p}/>
+        ))}
+        </div>     
     )
 }
