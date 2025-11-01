@@ -1,12 +1,13 @@
 //lista que, al montarse, realiza una peticion HTTP con axios
 //obtiene los primeros 20 Pokemons
 //los Pokemons deben ser renderizados en lista en forma de componentes PokemonItem
+"use client";
 import {useState, useEffect} from "react";
 import axios from "axios";
 import PokemonItem from "./PokemonItem"
 
 export default function PokemonList(){
-    const [pokemon, setPokemon] = useState([]);//empiezo con un array vacio, de tipo any[]
+    const [pokemon, setPokemon] = useState<any[]>([]);//empiezo con un array vacio, de tipo any[]
     const [error, setError] = useState<string>("");
     
     useEffect(() => {
