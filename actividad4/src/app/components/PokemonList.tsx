@@ -10,6 +10,7 @@ import Link from "next/link";
 import PokemonItem from "./PokemonItem"
 import Pagination from "./Pagination"
 import usePokemon from "../hooks/usePokemon"
+import {useFavorites, useCreateFavorite, useDeleteFavorite}from "../hooks/useFavorites"
 import {Pokemon} from "../services/utils"
 
 async function fetchPokemon(): Promise<Pokemon[]>{
@@ -38,6 +39,9 @@ export default function PokemonList(){
     const {data, isLoading, error} = usePokemon(cant_pokemon, offset);
     const limit = data?.length;
 
+    const {data: favorites, isLoading: favLoading } = useFavorites();
+    const createFavorite = useCreateFavorite();
+    const deleteFavorite = useDeleteFavorite();
     //const [pokemon, setPokemon] = useState<any[]>([]);//empiezo con un array vacio, de tipo any[]
     //const [error, setError] = useState<string>("");
     //const [loading,setLoading] = useState(true);
@@ -67,14 +71,49 @@ export default function PokemonList(){
 
     if (error) 
         return <p>Error al cargar los pokemons..</p>;
+
+    const isFavorite = (pokemon: Pokemon) =>
+        favorites?.some((fav) => fav.name === pokemon.name);
+
+    const toggleFavorite = async (pokemon:Pokemon) => {
+        try{
+            if (isFavorite(pokemon)){//ya esta en favoritos
+                const aux = favorites?.find((f)=> f.name === pokemon.name);
+                if (aux) await deleteFavorite.mutateAsync(pokemon.id);
+            } 
+            else{
+                await createFavorite.mutateAsync({
+                    id: pokemon.id,
+                    name: pokemon.name,
+                });
+            }
+
+        } catch (error){
+            console.error("Error al cambiar favorito:", error);
+        }
+    };
     
     return(
         <div>
             <div className="pokemon-list">
             {data?.map(p => (
-                <Link key={p.name} href={`/pokemon/${p.name}`}>
-                    <PokemonItem key={p.name} pokemon={p}/>
-                </Link>
+                <div>
+                    <Link key={p.name} href={`/pokemon/${p.name}`}>
+                        <PokemonItem key={p.name} pokemon={p}/>
+                    </Link>
+                    <button 
+                        onClick={()=> toggleFavorite(p)}
+                        className={`mt-3 px-3 py-1 rounded font-semibold ${
+                        isFavorite(p)
+                        ? "bg-yellow-400 text-black" //asi distingo los favs
+                        : "bg-gray-300 text-black"
+                    }`}>
+                        {isFavorite(p)
+                        ? "★"
+                        : "☆"}
+                    </button>
+                </div>
+                
             ))}
             </div>
 

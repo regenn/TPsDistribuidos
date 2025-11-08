@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.90.7",
     "axios": "^1.13.1",
     "next": "15.5.4",
     "react": "19.1.0",

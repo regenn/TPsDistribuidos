@@ -2,6 +2,7 @@ import axios from "axios";
 
 export type Pokemon = {
     name: string;
+    id: number;
 }
 export async function fetchPokemonList(cant_pokemon: number, offset: number): Promise<Pokemon[]>{
     const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limi=${cant_pokemon}&offset=${offset}`);

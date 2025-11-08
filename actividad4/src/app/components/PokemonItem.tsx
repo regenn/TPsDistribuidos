@@ -18,6 +18,9 @@ export default function PokemonItem({pokemon}:PokemonItem){
                     style={{imageRendering: "pixelated"}}
                 />
                 <h3 style={{fontWeight:"bold",fontSize:"20px"}}>{pokemon.name}</h3>
+                <button>
+                    
+                </button>
             </div>
     );
 }
